@@ -1,0 +1,16 @@
+/* App.css */
+
+/* Card style for sections (form, chart, list) */
+.card {
+  @apply bg-white rounded-2xl shadow-md p-6;
+}
+
+/* Navbar styling */
+.navbar {
+  @apply bg-white shadow-md rounded-2xl px-6 py-4 flex justify-between items-center mb-8;
+}
+
+/* Transaction list items */
+.transaction-item {
+  @apply flex justify-between items-center bg-gray-50 px-4 py-2 rounded-lg shadow-sm;
+}
