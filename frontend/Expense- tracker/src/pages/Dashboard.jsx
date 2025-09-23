@@ -5,10 +5,14 @@ import { getCurrentUser, logout } from "../utils/auth";
 import ExpenseForm from "../components/Expenseform";
 import ExpenseList from "../components/Expenselist";
 import ChartComponent from "../components/ChartComponents";
+import { useToast } from "../components/Toast.jsx";
 
 export default function Dashboard() {
   const [expenses, setExpenses] = useState([]);
   const user = getCurrentUser();
+  const [budgetInput, setBudgetInput] = useState("");
+  const [savedBudget, setSavedBudget] = useState(0);
+  const { notify } = useToast();
 
   useEffect(() => {
     if (!user) return;
@@ -18,6 +22,16 @@ export default function Dashboard() {
       setExpenses(rows);
     });
     return () => unsub();
+  }, [user]);
+
+  // Load saved budget per user from localStorage
+  useEffect(() => {
+    if (!user) return;
+    const saved = localStorage.getItem(`budget:${user.uid}`);
+    if (saved != null) {
+      setSavedBudget(Number(saved) || 0);
+      setBudgetInput(String(saved));
+    }
   }, [user]);
 
   const handleAdd = async ({ title, amount, category, date, notes }) => {
@@ -46,6 +60,27 @@ export default function Dashboard() {
     return Object.entries(bucket).map(([k, v]) => ({ _id: k, total: v }));
   }, [expenses]);
 
+  const totalSpent = useMemo(() => {
+    return expenses.reduce((sum, e) => sum + Number(e.amount || 0), 0);
+  }, [expenses]);
+
+  const handleBudgetSubmit = (e) => {
+    e.preventDefault();
+    const b = Number(budgetInput);
+    if (!user) return;
+    if (!isFinite(b) || b <= 0) {
+      notify("Enter a valid budget amount", { type: "error" });
+      return;
+    }
+    setSavedBudget(b);
+    localStorage.setItem(`budget:${user.uid}`, String(b));
+    if (totalSpent > b) {
+      notify("Budget exceeded!", { type: "error" });
+    } else {
+      notify("Budget set. You're within budget.", { type: "success" });
+    }
+  };
+
   return (
     <div>
       <header>
@@ -56,6 +91,28 @@ export default function Dashboard() {
       </header>
       <div style={{ display: "flex", gap: 20 }}>
         <div style={{ flex: 1 }}>
+          <div className="card" style={{ marginBottom: 16, background: "#ffffff", color: "#000000", borderColor: "#e5e7eb" }}>
+            <h3>Budget</h3>
+            <form onSubmit={handleBudgetSubmit} style={{ display: "flex", gap: 10, alignItems: "center" }}>
+              <input
+                type="number"
+                placeholder="Set monthly budget"
+                value={budgetInput}
+                onChange={(e) => setBudgetInput(e.target.value)}
+              />
+              <button type="submit">Save</button>
+            </form>
+            <div style={{ marginTop: 8 }}>
+              <div>Total spent: ₹{totalSpent}</div>
+              {savedBudget > 0 && (
+                <div>
+                  {totalSpent <= savedBudget
+                    ? `Remaining: ₹${savedBudget - totalSpent}`
+                    : `Over by: ₹${totalSpent - savedBudget}`}
+                </div>
+              )}
+            </div>
+          </div>
           <ExpenseForm onAdd={handleAdd} />
           <ExpenseList expenses={expenses} onDelete={handleDelete} />
         </div>

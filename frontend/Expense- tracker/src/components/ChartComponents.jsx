@@ -3,8 +3,12 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function ChartComponent({ data = [] }) {
-  const labels = data.map((d) => d._id);
-  const values = data.map((d) => d.total);
+  const normalized = data.map((d) => ({
+    name: d._id ?? d.category ?? "Other",
+    total: Number(d.total ?? d.amount ?? 0),
+  }));
+  const labels = normalized.map((d) => d.name);
+  const values = normalized.map((d) => d.total);
 
   const chartData = {
     labels,
@@ -16,9 +20,27 @@ export default function ChartComponent({ data = [] }) {
     ],
   };
 
+  const topThree = normalized
+    .slice()
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 3);
+
   return (
     <div>
-      {data.length ? <Pie data={chartData} /> : <p>No summary yet</p>}
+      {normalized.length ? <Pie data={chartData} /> : <p>No summary yet</p>}
+      <div style={{ marginTop: 12 }}>
+        <div style={{ fontWeight: 600, marginBottom: 6 }}>Top 3 spending categories</div>
+        {topThree.length > 0 && topThree.some(t => t.total > 0) ? (
+          topThree.map((item, idx) => (
+            <div key={item.name + idx} style={{ display: 'flex', justifyContent: 'space-between', color: '#000000' }}>
+              <span>{idx + 1}. {item.name}</span>
+              <span>₹{item.total}</span>
+            </div>
+          ))
+        ) : (
+          <div style={{ color: '#94a3b8' }}>Add expenses to see your top categories.</div>
+        )}
+      </div>
     </div>
   );
 }

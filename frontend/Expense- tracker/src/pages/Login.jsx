@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../services/firebase";
 import { useToast } from "../components/Toast.jsx";
 
@@ -11,18 +11,7 @@ export default function Login() {
   const navigate = useNavigate();
   const { notify } = useToast();
   const googleProvider = new GoogleAuthProvider();
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      await signInWithEmailAndPassword(auth, email.trim(), password.trim());
-      notify("Welcome back!", { type: "success" });
-      navigate("/");
-    } catch (err) {
-      setError(err.message || "Login failed");
-      notify("Login failed", { type: "error" });
-    }
-  };
+  googleProvider.setCustomParameters({ prompt: "select_account" });
 
   const handleGoogle = async () => {
     try {
@@ -35,36 +24,73 @@ export default function Login() {
     }
   };
 
+  const handleEmailLogin = async (e) => {
+    e.preventDefault();
+    try {
+      await signInWithEmailAndPassword(auth, email.trim(), password.trim());
+      notify("Welcome back!", { type: "success" });
+      navigate("/");
+    } catch (err) {
+      const code = err.code || "auth/unknown";
+      const map = {
+        "auth/user-not-found": "No account found for this email.",
+        "auth/wrong-password": "Incorrect password.",
+        "auth/invalid-credential": "Invalid credentials. Please try again.",
+        "auth/too-many-requests": "Too many attempts. Please wait and try again.",
+      };
+      const msg = map[code] || err.message || "Login failed";
+      setError(msg);
+      notify(msg, { type: "error" });
+    }
+  };
+
+  const handleReset = async () => {
+    if (!email.trim()) {
+      setError("Enter your email to reset password");
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, email.trim());
+      notify("Password reset email sent", { type: "success" });
+    } catch (err) {
+      const msg = err.message || "Failed to send reset email";
+      setError(msg);
+      notify(msg, { type: "error" });
+    }
+  };
+
   return (
     <div className="container-center">
-      <div className="card" style={{ width: 400 }}>
-      <h2>🔑 Login</h2>
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Enter email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Enter password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Login</button>
-      </form>
-      <div style={{ marginTop: 10 }}>
-        <button type="button" onClick={handleGoogle} style={{ width: "100%" }}>
-          Continue with Google
-        </button>
-      </div>
-      {error && <p className="error">{error}</p>}
-      <p style={{ marginTop: "1rem" }}>
-        Don’t have an account? <Link className="link-muted" to="/register">Register</Link>
-      </p>
+      <div className="card" style={{ width: 560, color: "#ffffff" }}>
+        <h2 style={{ textAlign: "center" }}>Sign in</h2>
+        <div style={{ display: "grid", gap: 16 }}>
+          <button type="button" onClick={handleGoogle}>
+            Continue with Google
+          </button>
+          <div style={{ height: 1, background: "#1f2937", margin: "6px 0" }} />
+          <form onSubmit={handleEmailLogin} style={{ display: "grid", gap: 12 }}>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button type="submit">Login with Email</button>
+          </form>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <button type="button" onClick={handleReset}>Forgot password?</button>
+            <button type="button" onClick={() => navigate('/register')}>Create account</button>
+          </div>
+        </div>
+        {error && <p className="error">{error}</p>}
       </div>
     </div>
   );
