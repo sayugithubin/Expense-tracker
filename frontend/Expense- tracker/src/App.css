@@ -1,16 +1,53 @@
 /* App.css */
 
-/* Card style for sections (form, chart, list) */
-.card {
-  @apply bg-white rounded-2xl shadow-md p-6;
-}
-
-/* Navbar styling */
+/* Navbar */
 .navbar {
-  @apply bg-white shadow-md rounded-2xl px-6 py-4 flex justify-between items-center mb-8;
+  background: #ffffff;
+  padding: 1rem 2rem;
+  margin-bottom: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* Transaction list items */
+/* Card sections */
+.card {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin-bottom: 1.5rem;
+}
+
+/* Form styling */
+form input, form select {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+form input:focus, form select:focus {
+  outline: none;
+  border-color: #4a5fc1;
+  box-shadow: 0 0 4px #4a5fc1;
+}
+
+/* Transaction list */
 .transaction-item {
-  @apply flex justify-between items-center bg-gray-50 px-4 py-2 rounded-lg shadow-sm;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #f7f9fc;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+.transaction-item span.amount {
+  font-weight: bold;
+  color: #2f3a8d;
 }

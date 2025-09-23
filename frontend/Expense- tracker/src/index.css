@@ -1,16 +1,39 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* index.css */
 
-/* Custom global styles */
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-  @apply bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: linear-gradient(to right, #eef2f3, #d9e4f5);
+  color: #333;
+  min-height: 100vh;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  @apply font-semibold text-gray-800;
+/* Links */
+a {
+  text-decoration: none;
+  color: #4a5fc1;
+}
+a:hover {
+  color: #2f3a8d;
 }
 
+/* Buttons */
 button {
-  @apply rounded-lg px-4 py-2 font-medium transition;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: #4a5fc1;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: 0.3s ease;
+}
+button:hover {
+  background-color: #2f3a8d;
 }

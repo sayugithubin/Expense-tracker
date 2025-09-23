@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
 import { getUser, logout } from "../utils/auth";
-import ExpenseForm from "../components/ExpenseForm";
-import ExpenseList from "../components/ExpenseList";
+import ExpenseForm from "../components/Expenseform";
+import ExpenseList from "../components/Expenselist";
 import ChartComponent from "../components/ChartComponents";
 
 export default function Dashboard() {
