@@ -1,4 +1,4 @@
-# Expense-tracker
+# Expense-Tracker
 
 The Expense Tracker is a full-stack MERN application that allows users to manage their expenses efficiently. Users can log their incomes and expenses, view summaries, and gain insights through interactive data visualizations. This project helps in budgeting and understanding spending habits.
 
