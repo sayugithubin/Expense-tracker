@@ -1,0 +1,14 @@
+/* ChartComponent.css */
+
+/* Split layout wrapper (used in App.jsx) */
+.frontpage {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* two equal sections */
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Chart styling */
+.chart-section {
+  text-align: center;
+}
