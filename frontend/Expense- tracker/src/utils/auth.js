@@ -1,14 +1,14 @@
-export function saveAuth({ token, user }) {
-  localStorage.setItem("token", token);
-  localStorage.setItem("user", JSON.stringify(user));
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../services/firebase";
+
+export function observeUser(callback) {
+  return onAuthStateChanged(auth, callback);
 }
 
-export function logout() {
-  localStorage.removeItem("token");
-  localStorage.removeItem("user");
+export function getCurrentUser() {
+  return auth.currentUser;
 }
 
-export function getUser() {
-  const u = localStorage.getItem("user");
-  return u ? JSON.parse(u) : null;
+export async function logout() {
+  await signOut(auth);
 }

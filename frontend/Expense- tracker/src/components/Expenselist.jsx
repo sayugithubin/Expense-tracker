@@ -13,7 +13,10 @@ export default function ExpenseList({ expenses, onDelete }) {
               <strong>{e.title}</strong> — ₹{e.amount}
             </div>
             <div>
-              {e.category} • {new Date(e.date).toLocaleDateString()}
+              {e.category} • {(() => {
+                const dateVal = e.date?.toDate ? e.date.toDate() : new Date(e.date);
+                return isNaN(dateVal) ? "" : dateVal.toLocaleDateString();
+              })()}
             </div>
             <button onClick={() => onDelete(e._id)}>Delete</button>
           </div>

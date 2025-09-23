@@ -1,5 +1,7 @@
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import "./ChartComponent.css";
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function ChartComponent({ data = [] }) {
@@ -11,14 +13,22 @@ export default function ChartComponent({ data = [] }) {
     datasets: [
       {
         data: values,
-        backgroundColor: ["#ff6384", "#36a2eb", "#ffcd56", "#4bc0c0", "#9966ff"],
+        backgroundColor: [
+          "#4a5fc1",
+          "#ff6384",
+          "#36a2eb",
+          "#ffcd56",
+          "#4bc0c0",
+        ],
+        borderWidth: 1,
       },
     ],
   };
 
   return (
-    <div>
-      {data.length ? <Pie data={chartData} /> : <p>No summary yet</p>}
+    <div className="card chart-section">
+      <h3>📊 Expense Overview</h3>
+      {data.length ? <Pie data={chartData} /> : <p>No data yet</p>}
     </div>
   );
 }

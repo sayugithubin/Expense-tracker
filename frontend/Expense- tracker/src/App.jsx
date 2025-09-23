@@ -1,67 +1,57 @@
-import { useState } from "react";
 import "./App.css";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { observeUser } from "./utils/auth";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
-function App() {
-  const [transactions, setTransactions] = useState([]);
-  const [text, setText] = useState("");
-  const [amount, setAmount] = useState("");
-
-  const addTransaction = (e) => {
-    e.preventDefault();
-    if (!text || !amount) return;
-    setTransactions([...transactions, { text, amount: +amount }]);
-    setText("");
-    setAmount("");
-  };
-
-  return (
-    <div className="App">
-      {/* Navbar */}
-      <div className="navbar">
-        <h2>💰 Expense Tracker</h2>
-        <button>Login</button>
-      </div>
-
-      <div className="container">
-        {/* Add Transaction */}
-        <div className="card">
-          <h3>Add Transaction</h3>
-          <form onSubmit={addTransaction}>
-            <input
-              type="text"
-              placeholder="Enter description"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              required
-            />
-            <input
-              type="number"
-              placeholder="Enter amount"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              required
-            />
-            <button type="submit">Add</button>
-          </form>
-        </div>
-
-        {/* Transaction List */}
-        <div className="card">
-          <h3>Transaction History</h3>
-          {transactions.length === 0 ? (
-            <p>No transactions yet.</p>
-          ) : (
-            transactions.map((t, i) => (
-              <div className="transaction-item" key={i}>
-                <span>{t.text}</span>
-                <span className="amount">₹{t.amount}</span>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-    </div>
-  );
+function useAuthUser() {
+  const [user, setUser] = useState(undefined);
+  useEffect(() => observeUser(setUser), []);
+  return user; // undefined=loading, null=logged out, object=logged in
 }
 
-export default App;
+function ProtectedRoute({ children }) {
+  const user = useAuthUser();
+  if (user === undefined) return null;
+  return user ? children : <Navigate to="/login" replace />;
+}
+
+function PublicRoute({ children }) {
+  const user = useAuthUser();
+  if (user === undefined) return null;
+  return user ? <Navigate to="/" replace /> : children;
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/login"
+        element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <PublicRoute>
+            <Register />
+          </PublicRoute>
+        }
+      />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}

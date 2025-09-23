@@ -1,53 +1,20 @@
-/* App.css */
-
-/* Navbar */
-.navbar {
-  background: #ffffff;
-  padding: 1rem 2rem;
-  margin-bottom: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-
+/* Navbar button group */
+.nav-buttons {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: 10px;
 }
 
-/* Card sections */
-.card {
-  background: #ffffff;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  margin-bottom: 1.5rem;
-}
-
-/* Form styling */
-form input, form select {
-  width: 100%;
-  padding: 10px;
-  margin: 6px 0;
+.nav-buttons button {
+  background: #4a5fc1;
+  color: white;
+  border: none;
   border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-}
-form input:focus, form select:focus {
-  outline: none;
-  border-color: #4a5fc1;
-  box-shadow: 0 0 4px #4a5fc1;
-}
-
-/* Transaction list */
-.transaction-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 14px;
-  background: #f7f9fc;
-  border-radius: 8px;
-  margin-bottom: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
   font-size: 0.95rem;
+  transition: background 0.3s;
 }
-.transaction-item span.amount {
-  font-weight: bold;
-  color: #2f3a8d;
+
+.nav-buttons button:hover {
+  background: #2f3a8d;
 }

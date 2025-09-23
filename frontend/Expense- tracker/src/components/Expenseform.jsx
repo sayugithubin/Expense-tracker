@@ -1,5 +1,4 @@
 import { useState } from "react";
-import API from "../services/api";
 
 export default function ExpenseForm({ onAdd }) {
   const [title, setTitle] = useState("");
@@ -9,13 +8,7 @@ export default function ExpenseForm({ onAdd }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await API.post("/expenses", {
-      title,
-      amount: Number(amount),
-      category,
-      date,
-    });
-    onAdd(res.data);
+    await onAdd({ title, amount, category, date });
     setTitle("");
     setAmount("");
     setCategory("Other");
