@@ -1,6 +1,6 @@
 # Expense-Tracker
 
-The Expense Tracker is a full-stack MERN + Firebase application that allows users to manage their expenses efficiently.
+The Expense Tracker is a full-stack Express,React, Node, Firebase application that allows users to manage their expenses efficiently.
 Users can log their incomes and expenses, view summaries, and gain insights through interactive data visualizations.
 Firebase is used for Authentication and Cloud Firestore Database, ensuring scalability and security.
 
@@ -16,8 +16,8 @@ Firebase is used for Authentication and Cloud Firestore Database, ensuring scala
 
 Clone the repository
 
-git clone https://github.com/yourusername/mern-firebase-expense-tracker.git
-cd mern-firebase-expense-tracker
+git clone https://github.com/yourusername/expense-tracker.git
+cd expense-tracker
 
 
 Install dependencies
