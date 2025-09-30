@@ -18,7 +18,7 @@ router.get('/', auth, async (req, res) => {
 // Add expense
 router.post('/', auth, async (req, res) => {
   try {
-    const { title, amount, category, date, notes } = req.body;
+    const { title, amount, currency, category, date, notes } = req.body;
     if (!title || amount == null) {
       return res.status(400).json({ msg: 'Title and amount are required' });
     }
@@ -26,6 +26,7 @@ router.post('/', auth, async (req, res) => {
       user: req.user.id,
       title,
       amount,
+      currency,
       category,
       date,
       notes

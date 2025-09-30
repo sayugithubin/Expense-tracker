@@ -5,6 +5,7 @@ export default function ExpenseForm({ onAdd }) {
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("Other");
+  const [currency, setCurrency] = useState("USD");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
 
   const handleSubmit = async (e) => {
@@ -12,6 +13,7 @@ export default function ExpenseForm({ onAdd }) {
     const res = await API.post("/expenses", {
       title,
       amount: Number(amount),
+      currency,
       category,
       date,
     });
@@ -19,6 +21,7 @@ export default function ExpenseForm({ onAdd }) {
     setTitle("");
     setAmount("");
     setCategory("Other");
+    setCurrency("USD");
     setDate(new Date().toISOString().slice(0, 10));
   };
 
@@ -43,6 +46,13 @@ export default function ExpenseForm({ onAdd }) {
         <option>Shopping</option>
         <option>Bills</option>
         <option>Other</option>
+      </select>
+      <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+        <option value="GBP">GBP</option>
+        <option value="INR">INR</option>
+        <option value="JPY">JPY</option>
       </select>
       <input
         type="date"
