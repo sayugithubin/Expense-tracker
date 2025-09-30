@@ -37,6 +37,31 @@ body {
   min-height: 100vh;
 }
 
+/* Theming */
+:root.theme-dark body {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+:root.theme-dark .card {
+  background: #111827;
+  border-color: #1f2937;
+  color: #e2e8f0;
+}
+
+:root.theme-dark input, :root.theme-dark select {
+  background: #0b1220;
+  color: #e2e8f0;
+  border-color: #233052;
+}
+
+:root.theme-dark button {
+  background-color: #334155;
+  color: #e2e8f0;
+}
+
+:root.theme-dark a { color: #93c5fd; }
+
 /* Links */
 a {
   text-decoration: none;
@@ -60,3 +85,93 @@ button {
 button:hover {
   background-color: #2f3a8d;
 }
+
+/* Settings panel (Chrome-like) */
+.settings-panel {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  background: #ffffff;
+  color: #111827;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  z-index: 1100;
+}
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.settings-title {
+  font-weight: 600;
+}
+
+.settings-sub {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Switch control */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 26px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #e5e7eb;
+  transition: 0.2s;
+  border-radius: 9999px;
+  box-shadow: inset 0 0 0 1px #d1d5db;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  top: 3px;
+  background-color: white;
+  transition: 0.2s;
+  border-radius: 9999px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.switch input:checked + .slider {
+  background-color: #111827;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+/* Dark theme version of panel */
+:root.theme-dark .settings-panel {
+  background: #0b1220;
+  color: #e2e8f0;
+  border-color: #1f2937;
+}
+
+:root.theme-dark .settings-sub { color: #94a3b8; }
+
+:root.theme-dark .slider { background-color: #1f2937; box-shadow: inset 0 0 0 1px #374151; }
+
+:root.theme-dark .slider:before { background-color: #111827; }

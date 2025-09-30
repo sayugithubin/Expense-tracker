@@ -1,5 +1,5 @@
 import { addDoc, collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase"; // adjust path if needed
+import { db } from "../services/firebase";
 
 export const addTransaction = async (transaction) => {
   await addDoc(collection(db, "transactions"), transaction);

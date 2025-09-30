@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { collection, onSnapshot, orderBy, query, addDoc, deleteDoc, doc, Timestamp } from "firebase/firestore";
 import { db } from "../services/firebase";
 import { getCurrentUser, logout } from "../utils/auth";
@@ -63,6 +63,21 @@ export default function Dashboard() {
   const totalSpent = useMemo(() => {
     return expenses.reduce((sum, e) => sum + Number(e.amount || 0), 0);
   }, [expenses]);
+
+  // Notify when budget is exceeded (popup via Toast)
+  const overBudgetNotifiedRef = useRef(false);
+  useEffect(() => {
+    if (!user) return;
+    if (savedBudget > 0 && totalSpent > savedBudget) {
+      if (!overBudgetNotifiedRef.current) {
+        notify("Budget exceeded!", { type: "error" });
+        overBudgetNotifiedRef.current = true;
+      }
+    } else {
+      // Reset when user goes back under budget or budget not set
+      overBudgetNotifiedRef.current = false;
+    }
+  }, [totalSpent, savedBudget, user, notify]);
 
   const handleBudgetSubmit = (e) => {
     e.preventDefault();
